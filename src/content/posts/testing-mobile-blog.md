@@ -3,7 +3,7 @@ title: AI in Everyday Life - Beyond the Hype
 description: Explore the practical, often unseen ways Artificial Intelligence is shaping our daily routines, from smart homes to personalized recommendations, and discuss its future and ethical considerations.
 pubDate: 2025-06-27
 author: Your Name Here
-tags: AI, Artificial Intelligence, Everyday Tech, Smart Home, Technology, Future, Ethics
+tags: [AI, Artificial Intelligence, Everyday] Tech, Smart Home, Technology, Future, Ethics
 ---
 
 # AI in Everyday Life: Beyond the Hype
