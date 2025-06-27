@@ -1,0 +1,60 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import PageHead from '@/components/PageHead.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import PaginationComponent from '@/components/ui/pagination'; // Erudite's pagination component
+import { SITE } from '@/consts';
+import { getCollection } from 'astro:content';
+
+// Fetch and sort all non-draft posts
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf());
+
+// Astro's built-in pagination will create multiple pages if needed.
+// The actual pagination logic (creating page/1/, page/2/) happens via Astro's getStaticPaths
+// for paginated routes. This index page will serve as the first page.
+// For this index page, we just display the first set of posts.
+// A separate [page].astro or similar would handle /posts/2, /posts/3 etc.
+// For simplicity here, I'll just show all posts on this index, and a more complex pagination
+// setup can be added if the number of posts grows large and requires separate pages.
+// Alternatively, Astro's `paginate` function can be used directly in `getStaticPaths` of an `[...page].astro` route.
+
+// For now, let's display all posts, assuming the number is manageable for a single page list.
+// If true pagination with separate pages is needed, this page would be `src/pages/posts/1.astro` or part of `[page].astro`.
+
+const postsToDisplay = sortedPosts; // Display all for now
+const pageTitle = "Blog Posts";
+const pageDescription = "All blog posts from " + SITE.title;
+---
+
+<Layout>
+  <Fragment slot="head">
+    <PageHead title={pageTitle} description={pageDescription} />
+  </Fragment>
+
+  <section class="py-8">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8 text-center">{pageTitle}</h1>
+
+      {postsToDisplay.length === 0 ? (
+        <p class="text-center text-muted-foreground">No posts found.</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {postsToDisplay.map(post => (
+            <BlogCard entry={post} />
+          ))}
+        </div>
+      )}
+
+      <!--
+        Basic Pagination Example (if needed later with Astro's paginate feature):
+        If Astro.props.page (from paginate) is available:
+        <PaginationComponent
+          currentPage={Astro.props.page.currentPage}
+          totalPages={Astro.props.page.lastPage}
+          baseUrl="/posts/" (or the correct base for paginated pages)
+        />
+      -->
+    </div>
+  </section>
+</Layout>

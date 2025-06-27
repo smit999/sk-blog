@@ -1,0 +1,23 @@
+{
+  // "extends": "astro/tsconfigs/base", // Removed extends
+  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"], // Ensure all relevant files are included
+  "exclude": ["dist", "node_modules"],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler", // Or "node" if "bundler" causes issues
+    "jsx": "react-jsx", // For .tsx files (shadcn/ui)
+    "jsxImportSource": "react", // For .tsx files
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "lib": ["ESNext", "DOM", "DOM.Iterable"], // Added common libs
+    "skipLibCheck": true // May help in some environments
+  }
+}

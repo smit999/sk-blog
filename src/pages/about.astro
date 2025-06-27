@@ -1,0 +1,51 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import PageHead from '@/components/PageHead.astro';
+import { SITE } from '@/consts';
+
+const pageTitle = "About";
+const pageDescription = `Learn more about ${SITE.title} and its mission.`;
+---
+
+<Layout>
+  <Fragment slot="head">
+    <PageHead title={pageTitle} description={pageDescription} />
+  </Fragment>
+
+  <section class="py-8">
+    <div class="container mx-auto px-4 max-w-3xl prose dark:prose-invert">
+      <h1 class="text-4xl font-bold mb-8 text-center">{pageTitle}</h1>
+
+      <p>
+        Welcome to {SITE.title}! This blog is a dedicated space for exploring topics related to
+        web development, technology, and perhaps a few other adventures along the way.
+      </p>
+      <p>
+        Built with <a href="https://astro.build/" target="_blank" rel="noopener noreferrer">Astro</a>,
+        styled with the <a href="https://github.com/jktrn/astro-erudite" target="_blank" rel="noopener noreferrer">Erudite theme</a>
+        (which itself uses Tailwind CSS and shadcn/ui), and hosted on Cloudflare Pages, this site aims to be fast,
+        accessible, and easy to manage through a Git-based workflow.
+      </p>
+      <p>
+        The primary goal is to share knowledge, insights, and tutorials in a clear and concise manner.
+        Whether you're a seasoned developer or just starting out, I hope you find something valuable here.
+      </p>
+      <h2 class="text-2xl font-semibold mt-12 mb-4">The Author</h2>
+      <p>
+        This blog is currently maintained by a passionate developer (that's me!).
+        You can learn more about the author(s) on the (soon-to-be-implemented-or-fleshed-out) authors page.
+        For now, the default author for posts will be "Admin".
+      </p>
+      <h2 class="text-2xl font-semibold mt-12 mb-4">Why This Stack?</h2>
+      <ul>
+        <li><strong>Astro:</strong> For its incredible performance, content-focused approach, and the ability to use favorite UI components.</li>
+        <li><strong>Erudite Theme:</strong> Provides a clean, academic-inspired, and highly readable starting point.</li>
+        <li><strong>Markdown & Git:</strong> For a straightforward content creation and management workflow.</li>
+        <li><strong>Cloudflare Pages:</strong> For free, fast, and scalable hosting with seamless Git integration.</li>
+      </ul>
+      <p>
+        Thank you for visiting!
+      </p>
+    </div>
+  </section>
+</Layout>

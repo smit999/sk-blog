@@ -1,0 +1,38 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import PageHead from '@/components/PageHead.astro';
+import { Badge } from '@/components/ui/badge';
+import { Icon } from 'astro-icon/components';
+import { getSortedTags } from '@/lib/data-utils'; // Ensure this function exists and works as expected
+
+const sortedTags = await getSortedTags(); // This function should return { tag: string, count: number }[]
+const pageTitle = "All Tags";
+const pageDescription = "Browse all topics and tags used in the blog posts.";
+---
+
+<Layout>
+  <Fragment slot="head">
+    <PageHead title={pageTitle} description={pageDescription} />
+  </Fragment>
+
+  <section class="py-8">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <h1 class="text-4xl font-bold mb-8 text-center">{pageTitle}</h1>
+
+      {sortedTags.length === 0 ? (
+        <p class="text-center text-muted-foreground">No tags found.</p>
+      ) : (
+        <div class="flex flex-wrap justify-center gap-4">
+          {sortedTags.map(item => (
+            <a href={`/tags/${item.tag.toLowerCase()}`}>
+              <Badge variant="default" class="text-lg px-4 py-2 hover:bg-primary/80">
+                <Icon name="lucide:hash" class="size-4 mr-2" />
+                {item.tag} ({item.count})
+              </Badge>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

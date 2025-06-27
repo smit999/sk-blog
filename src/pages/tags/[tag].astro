@@ -1,0 +1,56 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import PageHead from '@/components/PageHead.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import { getPostsByTag, getSortedTags } from '@/lib/data-utils';
+import { SITE } from '@/consts';
+import { Icon } from 'astro-icon/components';
+
+export async function getStaticPaths() {
+  const sortedTags = await getSortedTags(); // Fetches [{ tag: string, count: number }]
+  return sortedTags.map(item => ({
+    params: { tag: item.tag.toLowerCase() },
+    props: { tagName: item.tag },
+  }));
+}
+
+interface Props {
+  tagName: string;
+}
+
+const { tagName } = Astro.props;
+const postsForTag = await getPostsByTag(tagName); // Assumes tagName casing matches original tag
+
+const pageTitle = `Posts tagged: "${tagName}"`;
+const pageDescription = `Browse all posts tagged with "${tagName}" on ${SITE.title}.`;
+---
+
+<Layout>
+  <Fragment slot="head">
+    <PageHead title={pageTitle} description={pageDescription} />
+  </Fragment>
+
+  <section class="py-8">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold mb-2 flex items-center justify-center gap-2">
+          <Icon name="lucide:hash" class="size-8" /> Posts tagged: "{tagName}"
+        </h1>
+        <a href="/tags" class="text-primary hover:underline text-sm">
+          &larr; View all tags
+        </a>
+      </div>
+
+      {postsForTag.length === 0 ? (
+        <p class="text-center text-muted-foreground">No posts found for this tag.</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {postsForTag.map(post => (
+            <BlogCard entry={post} />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

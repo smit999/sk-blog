@@ -1,0 +1,59 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import PageHead from '@/components/PageHead.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import { SITE } from '@/consts'; // For SITE.title if needed, and featuredPostCount
+import { getCollection } from 'astro:content';
+import { getRecentPosts } from '@/lib/data-utils';
+
+// Fetch recent posts
+const recentPosts = await getRecentPosts(SITE.featuredPostCount || 2);
+
+const siteTitle = SITE.title || "My Astro Blog"; // Fallback title
+const siteDescription = SITE.description || "Welcome to my new blog built with Astro and the Erudite theme!";
+---
+
+<Layout>
+  <Fragment slot="head">
+    <PageHead
+      title={`Welcome to ${siteTitle}`}
+      description={siteDescription}
+    />
+  </Fragment>
+
+  <div class="space-y-12">
+    <!-- Hero Section -->
+    <section class="text-center py-10">
+      <h1 class="text-5xl font-bold mb-4">Welcome to {siteTitle}!</h1>
+      <p class="text-xl text-muted-foreground">{siteDescription}</p>
+    </section>
+
+    <!-- About Snippet -->
+    <section class="max-w-2xl mx-auto text-center">
+      <h2 class="text-3xl font-semibold mb-3">About This Blog</h2>
+      <p class="text-lg text-foreground/80">
+        This is a space where I share my thoughts, learnings, and adventures in the world of web development and beyond.
+        Powered by Astro and styled with the Erudite theme for a clean, readable experience.
+      </p>
+    </section>
+
+    <!-- Featured Posts -->
+    {recentPosts.length > 0 && (
+      <section>
+        <h2 class="text-3xl font-semibold mb-6 text-center">Latest Posts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {recentPosts.map((post) => (
+            <BlogCard entry={post} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Optional CTA (Example) -->
+    <section class="text-center py-10">
+      <a href="/posts" class="text-primary hover:underline text-lg">
+        Explore all posts &rarr;
+      </a>
+    </section>
+  </div>
+</Layout>
