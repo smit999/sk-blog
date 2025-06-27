@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 
-// Posts collection (formerly blog)
+// Posts collection
 const posts = defineCollection({
   type: 'content',
   schema: ({ image }) =>
@@ -8,23 +8,21 @@ const posts = defineCollection({
       title: z.string(),
       description: z.string(),
       pubDate: z.coerce.date(),
-      author: z.string().optional(), // Default to "Admin" will be handled in component/page
+      author: z.string().optional(),
       tags: z.array(z.string()).optional(),
-      order: z.number().optional(), // from Erudite
-      image: image().optional(), // from Erudite
-      draft: z.boolean().optional(), // from Erudite
+      order: z.number().optional(),
+      image: image().optional(),
+      draft: z.boolean().optional(),
     }),
 });
 
-// Authors collection - simplified to 'data' as primary focus is blog posts
-// Erudite theme might have author pages that expect these to be 'content' type.
-// This can be adjusted later if full author pages from Erudite are needed.
+// Authors collection - defined as data, no loader needed.
 const authors = defineCollection({
   type: 'data',
   schema: z.object({
     name: z.string(),
     pronouns: z.string().optional(),
-    avatar: z.string().url().or(z.string().startsWith('/')), // Path to avatar image
+    avatar: z.string().url().or(z.string().startsWith('/')),
     bio: z.string().optional(),
     mail: z.string().email().optional(),
     website: z.string().url().optional(),
@@ -35,8 +33,7 @@ const authors = defineCollection({
   }),
 });
 
-// Projects collection - simplified to 'data'
-// Erudite theme might have project pages expecting 'content' type.
+// Projects collection - defined as data, no loader needed.
 const projects = defineCollection({
   type: 'data',
   schema: ({ image }) =>
@@ -44,7 +41,7 @@ const projects = defineCollection({
       name: z.string(),
       description: z.string(),
       tags: z.array(z.string()),
-      image: image(), // Project cover image
+      image: image(),
       link: z.string().url(),
       startDate: z.coerce.date().optional(),
       endDate: z.coerce.date().optional(),

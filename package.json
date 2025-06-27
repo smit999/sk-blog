@@ -29,6 +29,7 @@
     "astro": "^5.10.1",
     "astro-expressive-code": "^0.41.2",
     "astro-icon": "^1.1.5",
+    "class-variance-authority": "^0.7.1",
     "markdown-it": "^14.1.0",
     "rehype-document": "^7.0.3",
     "rehype-external-links": "^3.0.0",
