@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const tagSet = new Set(posts.flatMap(post => post.data.tags ?? []));
+  const tags = Array.from(tagSet);
+  
+  return tags.map(tag => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+const posts = (await getCollection('posts')).filter(post => post.data.tags && post.data.tags.includes(tag));
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Posts tagged '{tag}' | My Astro Blog</title>
+    <meta name="description" content={`All posts tagged '${tag}'`} />
+  </head>
+  <body class="bg-gray-50 text-gray-900 font-sans m-0">
+    <main class="max-w-2xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg">
+      <a href="/" class="text-blue-600 hover:underline text-sm">← Back to Home</a>
+      <h1 class="text-2xl font-bold mb-4">Posts tagged '{tag}'</h1>
+      <section>
+        {posts.length === 0 ? (
+          <p class="text-gray-500">No posts found for this tag.</p>
+        ) : (
+          posts.map(post => (
+            <article class="mb-8 pb-6 border-b border-gray-200 last:border-b-0 last:pb-0">
+              <h2 class="text-xl font-semibold mb-2">
+                <a href={"/posts/" + post.slug + "/"} class="text-blue-600 hover:underline">{post.data.title}</a>
+              </h2>
+              <div class="text-gray-400 text-sm mb-2">
+                {new Date(post.data.pubDate).toLocaleDateString()} &middot; {post.data.author ?? 'Admin'}
+              </div>
+              <p class="text-gray-700">{post.data.description}</p>
+            </article>
+          ))
+        )}
+      </section>
+    </main>
+  </body>
+</html> 

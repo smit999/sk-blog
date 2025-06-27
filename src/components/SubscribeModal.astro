@@ -1,0 +1,126 @@
+---
+// Subscribe Modal Component
+---
+
+<div id="subscribe-modal" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg hidden z-50 transform translate-y-full transition-transform duration-300">
+  <div class="max-w-4xl mx-auto p-6">
+    <div class="flex items-center justify-between">
+      <div class="flex-1">
+        <h2 class="text-xl font-bold text-gray-900 mb-2">Stay Updated!</h2>
+        <p class="text-gray-600 text-sm">
+          Get notified when I publish new blog posts about web development, AI, and automation.
+        </p>
+      </div>
+      
+      <div class="flex items-center space-x-4 ml-6">
+        <form id="subscribe-form" class="flex items-center space-x-3">
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            placeholder="your@email.com"
+          >
+          
+          <button 
+            type="submit" 
+            class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200 font-medium text-sm whitespace-nowrap"
+          >
+            Subscribe
+          </button>
+        </form>
+        
+        <button id="close-modal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold ml-2">
+          &times;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Subscribe Modal Logic
+  const modal = document.getElementById('subscribe-modal');
+  const closeBtn = document.getElementById('close-modal');
+  const form = document.getElementById('subscribe-form');
+  
+  // Show modal after 3 seconds
+  setTimeout(() => {
+    if (!localStorage.getItem('subscribed')) {
+      modal.classList.remove('hidden');
+      // Trigger slide up animation
+      setTimeout(() => {
+        modal.classList.remove('translate-y-full');
+      }, 100);
+    }
+  }, 3000);
+  
+  // Close modal
+  closeBtn.addEventListener('click', () => {
+    modal.classList.add('translate-y-full');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  });
+  
+  // Handle form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    // Show loading state
+    submitBtn.textContent = 'Subscribing...';
+    submitBtn.disabled = true;
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (response.ok) {
+        // Success
+        localStorage.setItem('subscribed', 'true');
+        
+        // Slide down and hide modal
+        modal.classList.add('translate-y-full');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 300);
+        
+        // Show success message
+        const successMsg = document.createElement('div');
+        successMsg.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg z-50';
+        successMsg.textContent = 'Successfully subscribed!';
+        document.body.appendChild(successMsg);
+        
+        setTimeout(() => {
+          successMsg.remove();
+        }, 3000);
+      } else {
+        throw new Error('Subscription failed');
+      }
+    } catch (error) {
+      // Show error message
+      const errorMsg = document.createElement('div');
+      errorMsg.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-md shadow-lg z-50';
+      errorMsg.textContent = 'Subscription failed. Please try again.';
+      document.body.appendChild(errorMsg);
+      
+      setTimeout(() => {
+        errorMsg.remove();
+      }, 3000);
+    } finally {
+      // Reset button
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+</script> 
