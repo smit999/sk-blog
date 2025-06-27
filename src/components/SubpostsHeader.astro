@@ -1,11 +1,8 @@
 ---
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
-  getCombinedReadingTime,
   getParentId,
   getParentPost,
-  getPostById,
-  getPostReadingTime,
   getSubpostsForParent,
   isSubpost,
 } from '@/lib/data-utils'
@@ -114,7 +111,7 @@ const currentSubpostDetails = isCurrentSubpost
                     </div>
                   ) : (
                     <a
-                      href={`/blog/${activePost.id}`}
+                      href={`/posts/${activePost.id.replace(/\.md$/, '')}`}
                       class="mobile-subposts-link hover:text-foreground text-muted-foreground hover:bg-muted/50 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors"
                     >
                       <Icon
@@ -164,7 +161,7 @@ const currentSubpostDetails = isCurrentSubpost
                       </div>
                     ) : (
                       <a
-                        href={`/blog/${subpost.id}`}
+                        href={`/posts/${subpost.id.replace(/\.md$/, '')}`}
                         class="mobile-subposts-link hover:text-foreground text-muted-foreground hover:bg-muted/50 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors"
                       >
                         <Icon
