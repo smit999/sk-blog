@@ -1,0 +1,6 @@
+name = "sk-blog"
+compatibility_date = "2024-05-01"
+
+[[kv_namespaces]]
+binding = "SUBSCRIBERS"           # Must match your code and dashboard binding
+id = "584c721b735a49a39550cd0e8b907b66"      # Replace with your actual KV Namespace ID from Cloudflare dashboard
