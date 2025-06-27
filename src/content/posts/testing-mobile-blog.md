@@ -1,9 +1,17 @@
 ---
-title: AI in Everyday Life - Beyond the Hype
-description: Explore the practical, often unseen ways Artificial Intelligence is shaping our daily routines, from smart homes to personalized recommendations, and discuss its future and ethical considerations.
+title: "AI in Everyday Life - Beyond the Hype"
+description: "Explore the practical, often unseen ways Artificial Intelligence is shaping our daily routines, from smart homes to personalized recommendations, and discuss its future and ethical considerations."
 pubDate: 2025-06-27
-author: Your Name Here
-tags: [AI, Artificial Intelligence, Everyday] Tech, Smart Home, Technology, Future, Ethics
+author: "Smit"
+tags: [AI, Artificial Intelligence, Everyday Tech, Smart Home, Technology, Future, Ethics]
+---
+
+---
+title: "Hello World: My First Post"
+description: "This is the first post on my new Astro blog. Welcome!"
+pubDate: 2024-01-15
+author: "Admin"
+tags: ["Astro", "Blogging", "Welcome"]
 ---
 
 # AI in Everyday Life: Beyond the Hype
