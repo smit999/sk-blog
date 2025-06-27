@@ -1,18 +1,17 @@
-# Git-Based Blogging Platform with Astro and Cloudflare Pages
+# SK BLOG: A Git-Based Blogging Platform with Astro
 
-This is a fast, static blogging application built with [Astro](https://astro.build/) and designed for easy content management via Git. It's themed with a customized version of the "Astro Erudite" theme and ready for deployment on [Cloudflare Pages](https://pages.cloudflare.com/).
+This is a fast, static blogging application built with [Astro](https://astro.build/) and designed for easy content management via Git. It's styled with a clean, readable design inspired by academic aesthetics (derived from the Erudite theme) and ready for deployment on [Cloudflare Pages](https://pages.cloudflare.com/).
 
 ## Core Features
 
 - **Astro-Powered**: Leverages Astro for optimal performance and a great developer experience.
-- **Erudite Theme**: Clean, readable, and academic-inspired design.
+- **Clean Design**: Readable and focused design, adapted from theme sources.
 - **Git-Based Content**: Create new blog posts simply by adding Markdown files to the `src/content/posts/` directory.
 - **Tailwind CSS**: For utility-first styling.
-- **Shadcn/ui Components**: Base UI elements are integrated via the Erudite theme.
+- **Shadcn/ui Components**: Base UI elements are integrated.
 - **Content Collections**: Astro's Content Collections manage blog posts, authors, and projects.
 - **Dark Mode**: Supported.
 - **RSS Feed**: Automatically generated at `/rss.xml`.
-- **Subscribe Pop-up**: A simple pop-up to collect email addresses, saving them to `subscribers.json` via an API route.
 - **Cloudflare Pages Ready**: Optimized for seamless deployment on Cloudflare's global network.
 
 ## Project Structure
@@ -42,31 +41,30 @@ This is a fast, static blogging application built with [Astro](https://astro.bui
     ```
 
 3.  **Manually Download Required Assets:**
-    The Erudite theme uses specific fonts and image assets that could not be included directly via the automated setup due to tool limitations. Please download them from the original theme repository and place them into your project:
+    The theme uses specific fonts and image assets that could not be included directly via the automated setup due to tool limitations. Please download them from the original Erudite theme repository ([https://github.com/jktrn/astro-erudite](https://github.com/jktrn/astro-erudite)) and place them into your project:
 
     *   **Fonts (`GeistVF.woff2`, `GeistMonoVF.woff2`):**
-        *   Source: [https://github.com/jktrn/astro-erudite/tree/main/public/fonts](https://github.com/jktrn/astro-erudite/tree/main/public/fonts)
-        *   Destination: `public/fonts/` (overwrite the placeholder files).
+        *   Source: `public/fonts/` directory in the Erudite theme repo.
+        *   Destination: `public/fonts/` in your project (overwrite the placeholder files).
 
     *   **Root Public Images (favicons, etc.):**
-        *   Source Directory: [https://github.com/jktrn/astro-erudite/tree/main/public/](https://github.com/jktrn/astro-erudite/tree/main/public/)
-        *   Files to download: `apple-touch-icon.png`, `favicon-96x96.png`, `favicon.ico`.
-        *   (Note: `favicon.svg` and `site.webmanifest` were created with content).
-        *   Destination: `public/` (overwrite placeholders).
+        *   Source Directory: `public/` directory in the Erudite theme repo.
+        *   Files to download: `apple-touch-icon.png`, `favicon-96x96.png`, `favicon.ico`, `web-app-manifest-192x192.png`, `web-app-manifest-512x512.png`.
+        *   (Note: `favicon.svg` and `site.webmanifest` were created with SK BLOG specific content or Erudite's SVG content).
+        *   Destination: `public/` in your project (overwrite placeholders).
 
     *   **Static Images (logos, social cards):**
-        *   Source Directory: [https://github.com/jktrn/astro-erudite/tree/main/public/static/](https://github.com/jktrn/astro-erudite/tree/main/public/static/)
+        *   Source Directory: `public/static/` directory in the Erudite theme repo.
         *   Files to download: `1200x630.png`, `logo.png`, `twitter-card.png`.
-        *   (Note: `logo.svg` was created with content).
-        *   Destination: `public/static/` (overwrite placeholders).
-        *   Also download `web-app-manifest-192x192.png` and `web-app-manifest-512x512.png` from the root of Erudite's `public` and place them in your `public` directory.
+        *   (Note: `logo.svg` was created with Erudite's SVG content).
+        *   Destination: `public/static/` in your project (overwrite placeholders).
 
 
 4.  **Run the development server:**
     ```bash
     npm run dev
     ```
-    This will start a local development server, typically at `http://localhost:4321` (Astro's default) or `http://localhost:1234` (as configured in `astro.config.ts` from the Erudite theme).
+    This will start a local development server, typically at `http://localhost:1234` (as configured in `astro.config.ts`).
 
 ## Creating a New Blog Post
 
@@ -104,21 +102,11 @@ This is a fast, static blogging application built with [Astro](https://astro.bui
         *   You might need to set `NODE_VERSION` if your local Node.js version is very specific, though Cloudflare usually handles Astro well.
 6.  **Deploy your site.** Cloudflare Pages will automatically build and deploy your site. Future pushes to your connected branch (e.g., `main`) will trigger new deployments.
 
-### API Route for Subscriptions
-
-The subscribe pop-up uses an API route (`/api/subscribe`) that saves emails to `subscribers.json` in the project root.
-- **Local Development**: This works by writing to the local file system.
-- **Cloudflare Pages**: Astro's API routes are typically converted to Cloudflare Functions during the build process.
-    - Writing to a JSON file within the deployed function's file system is generally **not recommended for persistent storage** on Cloudflare Pages/Functions, as the file system can be ephemeral or read-only after deployment.
-    - **For robust email collection on Cloudflare Pages**, you would typically integrate with:
-        - **Cloudflare KV Store**: Store emails in a KV namespace. Requires setting up a KV namespace and binding it to your Pages Function.
-        - **Cloudflare D1**: A SQLite database.
-        - **Third-party email service API**: Send emails directly to a service like Mailchimp, ConvertKit, etc.
-    - The current `subscribers.json` approach will likely result in data loss or write errors in a deployed Cloudflare environment. It's included as a basic mechanism as per the request, with the understanding that the "automated emails later" step would involve replacing this with a proper backend or service.
+*(Note: The subscribe pop-up functionality was removed to resolve UI issues. If you wish to re-implement it, ensure proper handling of email storage for serverless environments, e.g., using Cloudflare KV or a third-party service, as direct file writes to `subscribers.json` are not reliable in such environments.)*
 
 ## Customization
 
-- **Site Configuration**: Modify `src/consts.ts` (for site title, description, social links, etc.) and `astro.config.ts` (for site URL, integrations).
+- **Site Configuration**: Modify `src/consts.ts` (for site title, description, social links, etc.) and `astro.config.ts` (for site URL, integrations). Remember to update `SITE.href` in `src/consts.ts` to your actual production URL.
 - **Styling**: Adjust Tailwind classes in components and pages. Global styles are in `src/styles/global.css` and `src/styles/typography.css`.
 - **Components**: Modify or add new components in `src/components/`.
 - **Layout**: The main site structure is in `src/layouts/Layout.astro`.

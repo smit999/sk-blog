@@ -1,11 +1,11 @@
 import type { IconMap, SocialLink, Site } from '@/types'
 
 export const SITE: Site = {
-  title: 'astro-erudite',
+  title: 'SK BLOG',
   description:
-    'astro-erudite is a opinionated, unstyled blogging template—built with Astro, Tailwind, and shadcn/ui.',
-  href: 'https://astro-erudite.vercel.app',
-  author: 'jktrn',
+    'Welcome to SK BLOG! A personal blog exploring various topics.', // Generic description
+  href: 'https://sk-blog.pages.dev', // Placeholder, user should update
+  author: 'SK', // Updated author
   locale: 'en-US',
   featuredPostCount: 2,
   postsPerPage: 3,
