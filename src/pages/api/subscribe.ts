@@ -1,63 +1,41 @@
 import type { APIRoute } from 'astro';
-import fs from 'fs/promises';
-import path from 'path';
+
+// Add a type for the env property
+interface Env {
+  SUBSCRIBERS: KVNamespace;
+}
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = (locals as typeof locals & { env: Env }).env;
   try {
     const { email } = await request.json();
     
     // Validate email
     if (!email || !email.includes('@')) {
-      return new Response(JSON.stringify({ error: 'Invalid email address' }), {
+      return new Response(JSON.stringify({ error: 'Invalid email' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
     
-    // Path to subscribers file
-    const subscribersPath = path.join(process.cwd(), 'data', 'subscribers.json');
-    
-    // Ensure data directory exists
-    await fs.mkdir(path.dirname(subscribersPath), { recursive: true });
-    
-    // Read existing subscribers
-    let subscribers: string[] = [];
-    try {
-      const existingData = await fs.readFile(subscribersPath, 'utf-8');
-      subscribers = JSON.parse(existingData);
-    } catch (error) {
-      // File doesn't exist, start with empty array
-      subscribers = [];
-    }
-    
-    // Check if email already exists
-    if (subscribers.includes(email)) {
+    // Check if already subscribed
+    const exists = await env.SUBSCRIBERS.get(email);
+    if (exists) {
       return new Response(JSON.stringify({ error: 'Email already subscribed' }), {
-        status: 409,
+        status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
     
-    // Add new email
-    subscribers.push(email);
+    // Store the email (value can be a timestamp or just '1')
+    await env.SUBSCRIBERS.put(email, Date.now().toString());
     
-    // Save updated list
-    await fs.writeFile(subscribersPath, JSON.stringify(subscribers, null, 2));
-    
-    // Log subscription (for development)
-    console.log(`New subscription: ${email}`);
-    
-    return new Response(JSON.stringify({ 
-      success: true, 
-      message: 'Successfully subscribed!',
-      totalSubscribers: subscribers.length 
-    }), {
+    return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
-    
   } catch (error) {
     console.error('Subscription error:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
@@ -65,4 +43,12 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-}; 
+};
+
+// Cloudflare KVNamespace type for TypeScript
+// Remove this if you already have global types
+interface KVNamespace {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string): Promise<void>;
+  delete(key: string): Promise<void>;
+} 
