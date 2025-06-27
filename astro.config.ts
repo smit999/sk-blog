@@ -19,6 +19,7 @@ import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-s
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers' // Added for expressiveCode
 
 import tailwindcss from '@tailwindcss/vite' // For Vite plugins
+import { fileURLToPath, URL } from 'node:url'; // Added for path resolution
 
 // https://astro.build/config
 export default defineConfig({
@@ -74,6 +75,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()], // Erudite's way of integrating Tailwind
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
   },
   server: { // Added from Erudite - for local dev consistency
     port: 1234,
