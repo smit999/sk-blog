@@ -1,28 +1,30 @@
 import { defineCollection, z } from 'astro:content';
 
-// Blog collection schema - Name changed to 'posts' to match desired directory
-const posts = defineCollection({ // Renamed from 'blog' to 'posts'
+// Posts collection (formerly blog)
+const posts = defineCollection({
   type: 'content',
   schema: ({ image }) =>
     z.object({
       title: z.string(),
       description: z.string(),
       pubDate: z.coerce.date(),
-      author: z.string().optional(),
+      author: z.string().optional(), // Default to "Admin" will be handled in component/page
       tags: z.array(z.string()).optional(),
-      order: z.number().optional(),
-      image: image().optional(),
-      draft: z.boolean().optional(),
+      order: z.number().optional(), // from Erudite
+      image: image().optional(), // from Erudite
+      draft: z.boolean().optional(), // from Erudite
     }),
 });
 
-// Authors collection schema (from Erudite theme)
+// Authors collection - simplified to 'data' as primary focus is blog posts
+// Erudite theme might have author pages that expect these to be 'content' type.
+// This can be adjusted later if full author pages from Erudite are needed.
 const authors = defineCollection({
-  type: 'data', // Erudite's original used glob implying 'content'. This might need adjustment.
+  type: 'data',
   schema: z.object({
     name: z.string(),
     pronouns: z.string().optional(),
-    avatar: z.string().url().or(z.string().startsWith('/')),
+    avatar: z.string().url().or(z.string().startsWith('/')), // Path to avatar image
     bio: z.string().optional(),
     mail: z.string().email().optional(),
     website: z.string().url().optional(),
@@ -33,15 +35,16 @@ const authors = defineCollection({
   }),
 });
 
-// Projects collection schema (from Erudite theme)
+// Projects collection - simplified to 'data'
+// Erudite theme might have project pages expecting 'content' type.
 const projects = defineCollection({
-  type: 'data', // Erudite's original used glob implying 'content'. This might need adjustment.
+  type: 'data',
   schema: ({ image }) =>
     z.object({
       name: z.string(),
       description: z.string(),
       tags: z.array(z.string()),
-      image: image(),
+      image: image(), // Project cover image
       link: z.string().url(),
       startDate: z.coerce.date().optional(),
       endDate: z.coerce.date().optional(),
@@ -49,7 +52,7 @@ const projects = defineCollection({
 });
 
 export const collections = {
-  posts, // Collection key is now 'posts'
+  posts,
   authors,
   projects,
 };
