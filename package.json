@@ -16,6 +16,7 @@
     "@astrojs/sitemap": "^3.4.1",
     "@expressive-code/plugin-collapsible-sections": "^0.41.2",
     "@expressive-code/plugin-line-numbers": "^0.41.2",
+    "@iconify-json/lucide": "^1.2.53",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
