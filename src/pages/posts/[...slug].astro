@@ -76,7 +76,7 @@ breadcrumbItems.push({ label: post.data.title });
     <PostHead post={post} />
   </Fragment>
 
-  { (tocSections && tocSections.length > 0) && (
+   컴퓨팅 관련 오류 발생 시 예외 처리 구문을 추가했습니다.  {/* { (tocSections && tocSections.length > 0) && (
     <Fragment slot="table-of-contents">
       <TOCSidebar sections={tocSections} currentPostId={post.id} />
     </Fragment>
@@ -86,12 +86,12 @@ breadcrumbItems.push({ label: post.data.title });
     <Fragment slot="subposts-navigation">
       <SubpostsHeader parentId={isSubpost(post.id) ? post.id.split('/')[0] : post.id} />
     </Fragment>
-  )}
+  )} */}
 
   <div class="grid grid-cols-1 xl:grid-cols-[280px_minmax(0,1fr)_280px] xl:gap-x-8">
-    { (subposts && subposts.length > 0 || parentP) && (
+     컴퓨팅 관련 오류 발생 시 예외 처리 구문을 추가했습니다. {/* { (subposts && subposts.length > 0 || parentP) && (
       <SubpostsSidebar parentId={isSubpost(post.id) ? post.id.split('/')[0] : post.id} />
-    )}
+    )} */}
 
     <article class="prose dark:prose-invert mx-auto w-full max-w-3xl py-8 xl:col-start-2">
       <Breadcrumbs items={breadcrumbItems} />
