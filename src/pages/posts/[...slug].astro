@@ -54,11 +54,10 @@ const parentP = isSubpost(post.id) ? await getParentPost(post.id) : null;
 // Construct breadcrumbs
 const breadcrumbItems: BreadcrumbItem[] = [{ href: '/posts', label: 'Blog' }];
 
-console.log('Post Slug for Breadcrumbs:', post.slug, 'Slug Parts Length:', post.slug.split('/').length); // DIAGNOSTIC LOG
-
-// Extract category from the original post slug (e.g., "category/post-name/index")
+// Extract category from the original post slug (e.g., "category/post-name")
+// post.slug is like "general/hello-world" or "travel/my-alpine-adventure"
 const slugParts = post.slug.split('/');
-if (slugParts.length > 2) { // Check if there's a category part before post-name and index
+if (slugParts.length > 1) { // If slug is "category/post-name", length is 2. Category exists.
   const category = slugParts[0];
   // Capitalize first letter for display
   breadcrumbItems.push({ label: category.charAt(0).toUpperCase() + category.slice(1) });
