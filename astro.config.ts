@@ -23,7 +23,9 @@ import { fileURLToPath, URL } from 'node:url'; // Added for path resolution
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com', // Kept from original project, user can change this
+  // Use CF_PAGES_URL for dynamic site URL in Cloudflare Pages previews,
+  // otherwise fallback to a production URL or a sensible default.
+  site: process.env.CF_PAGES_URL || 'https://sk-blog-jules.pages.dev/', // Fallback to the root pages.dev subdomain
   integrations: [
     expressiveCode({
       themes: ['github-light', 'github-dark'],
