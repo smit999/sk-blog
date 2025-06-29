@@ -8,6 +8,7 @@ import type { BreadcrumbItem } from '@/components/Breadcrumbs.astro';
 import { Badge } from '@/components/ui/badge';
 import { Icon } from 'astro-icon/components';
 import { formatDate } from '@/lib/utils';
+import FormattedDate from '@/components/FormattedDate.astro'; // Import FormattedDate
 import { SITE } from '@/consts';
 import {
   getAdjacentPosts,
@@ -15,7 +16,7 @@ import {
   getSubpostsForParent,
   isSubpost,
   getParentPost,
-  parseAuthors
+  // parseAuthors // Commented out
 } from '@/lib/data-utils';
 import TOCSidebar from '@/components/TOCSidebar.astro';
 import SubpostsHeader from '@/components/SubpostsHeader.astro';
@@ -41,8 +42,9 @@ interface Props {
 const { post } = Astro.props; // post.slug here is the original one, e.g., "category/post-name/index"
 const { Content } = await post.render(); // Correct way to get Content component
 
-const authors = await parseAuthors(post.data.author ? [post.data.author] : (post.data.authors || [])); // Handle single author or authors array
-const displayAuthor = authors.length > 0 ? authors[0].name : (post.data.author || 'Admin'); // Default to 'Admin'
+// const authors = await parseAuthors(post.data.author ? [post.data.author] : (post.data.authors || [])); // Handle single author or authors array
+// const displayAuthor = authors.length > 0 ? authors[0].name : (post.data.author || 'Admin'); // Default to 'Admin'
+const displayAuthor = post.data.author || 'Admin'; // Simplified for now
 
 const { newer, older, parent } = await getAdjacentPosts(post.id); // Use post.id for adj posts
 const tocSections = await getTOCSections(post.id);
@@ -96,8 +98,8 @@ breadcrumbItems.push({ label: post.data.title });
       <header id="post-title" class="mb-8">
         <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
         <div class="text-sm text-muted-foreground flex flex-wrap items-center gap-x-2">
-          <span>By {displayAuthor}</span>
-          <span>&bull;</span>
+          <!-- <span>By {displayAuthor}</span> -->
+          <!-- <span>&bull;</span> -->
           <span><FormattedDate date={post.data.pubDate} /></span>
           {post.data.updatedDate && (
             <>

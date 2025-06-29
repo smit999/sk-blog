@@ -6,7 +6,7 @@ import {
   getCombinedReadingTime,
   getSubpostCount,
   isSubpost,
-  parseAuthors,
+  // parseAuthors, // Commented out
 } from '@/lib/data-utils'
 import { formatDate } from '@/lib/utils'
 import { Icon } from 'astro-icon/components'
@@ -25,7 +25,7 @@ const readTime = await getCombinedReadingTime(entry.id)
 // Assuming entry.data.authors might not exist, but entry.data.author or post.data.authors (plural) does from content/config.ts for posts
 // The parseAuthors function in data-utils likely handles this.
 // For consistency with [...slug].astro, let's assume authors can be derived from entry.data.author or entry.data.authors
-const authors = await parseAuthors(entry.data.author ? [entry.data.author] : (entry.data.authors || []));
+// const authors = await parseAuthors(entry.data.author ? [entry.data.author] : (entry.data.authors || [])); // Commented out
 const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
 
 // Process slug for the link: remove trailing '/index' if present
@@ -61,8 +61,8 @@ const postUrl = `/posts/${postSlug}`;
       <div
         class="text-muted-foreground mb-2 flex flex-wrap items-center gap-x-2 text-xs"
       >
-        {
-          authors.length > 0 && (
+        {/* {
+          authors && authors.length > 0 && ( // Check if authors is defined
             <>
               {authors.map((author) => (
                 <div class="flex items-center gap-x-1.5">
@@ -79,9 +79,10 @@ const postUrl = `/posts/${postSlug}`;
               <Separator orientation="vertical" className="h-4!" />
             </>
           )
-        }
+        } */}
         <span>{formattedDate}</span>
-        <Separator orientation="vertical" className="h-4!" />
+        {/* <Separator orientation="vertical" className="h-4!" /> */} {/* Also remove separator if authors are removed before it */}
+        <span>&bull;</span> {/* Replace separator with a bullet or ensure spacing is okay */}
         <span>{readTime}</span>
         {
           subpostCount > 0 && (
