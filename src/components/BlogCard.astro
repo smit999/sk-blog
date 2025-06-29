@@ -31,6 +31,14 @@ const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
 // Process slug for the link: remove trailing '/index' if present
 const postSlug = entry.slug.endsWith('/index') ? entry.slug.slice(0, -'/index'.length) : entry.slug;
 const postUrl = `/posts/${postSlug}`;
+
+// Extract category from entry.slug (e.g., "category/post-name")
+let categoryDisplay: string | null = null;
+const slugParts = entry.slug.split('/'); // entry.slug is like "general/hello-world" or "travel/my-alpine-adventure"
+if (slugParts.length > 1) { // Category exists
+  const category = slugParts[0];
+  categoryDisplay = category.charAt(0).toUpperCase() + category.slice(1);
+}
 ---
 
 <div
@@ -80,9 +88,14 @@ const postUrl = `/posts/${postSlug}`;
             </>
           )
         } */}
+        {categoryDisplay && (
+          <>
+            <Badge variant="outline" class="text-xs mr-1 py-0.5 px-1.5">{categoryDisplay}</Badge>
+            <span>&bull;</span> {/* Separator */}
+          </>
+        )}
         <span>{formattedDate}</span>
-        {/* <Separator orientation="vertical" className="h-4!" /> */} {/* Also remove separator if authors are removed before it */}
-        <span>&bull;</span> {/* Replace separator with a bullet or ensure spacing is okay */}
+        <span>&bull;</span>
         <span>{readTime}</span>
         {
           subpostCount > 0 && (
