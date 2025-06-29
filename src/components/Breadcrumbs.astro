@@ -34,24 +34,17 @@ const { items } = Astro.props
         <>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            {index === items.length - 1 ? (
-              <BreadcrumbPage>
-                <span class="flex items-center gap-x-2">
-                  {item.icon && (
-                    <Icon name={item.icon} class="size-4 shrink-0" />
-                  )}
-                  <span>{item.label}</span>
-                </span>
-              </BreadcrumbPage>
+            {/* Simplified rendering for diagnostics: Use basic <a> or <span> for labels */}
+            {item.href ? (
+              <a href={item.href} class="transition-colors hover:text-foreground">
+                {item.icon && <Icon name={item.icon} class="size-4 shrink-0 mr-1 inline-block" />}
+                {item.label}
+              </a>
             ) : (
-              <BreadcrumbLink href={item.href}>
-                <span class="flex items-center gap-x-2">
-                  {item.icon && (
-                    <Icon name={item.icon} class="size-4 shrink-0" />
-                  )}
-                  <span>{item.label}</span>
-                </span>
-              </BreadcrumbLink>
+              <span class="font-medium text-foreground">
+                {item.icon && <Icon name={item.icon} class="size-4 shrink-0 mr-1 inline-block" />}
+                {item.label}
+              </span>
             )}
           </BreadcrumbItem>
         </>
