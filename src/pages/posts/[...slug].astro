@@ -54,6 +54,8 @@ const parentP = isSubpost(post.id) ? await getParentPost(post.id) : null;
 // Construct breadcrumbs
 const breadcrumbItems: BreadcrumbItem[] = [{ href: '/posts', label: 'Blog' }];
 
+console.log('Post Slug for Breadcrumbs:', post.slug, 'Slug Parts Length:', post.slug.split('/').length); // DIAGNOSTIC LOG
+
 // Extract category from the original post slug (e.g., "category/post-name/index")
 const slugParts = post.slug.split('/');
 if (slugParts.length > 2) { // Check if there's a category part before post-name and index
