@@ -15,21 +15,29 @@ import type { CollectionEntry } from 'astro:content'
 import Link from './Link.astro'
 
 interface Props {
-  entry: CollectionEntry<'blog'>
+  entry: CollectionEntry<'posts'>; // Corrected collection type
 }
 
 const { entry } = Astro.props
-const formattedDate = formatDate(entry.data.date)
+// Assuming entry.data.pubDate exists based on posts schema, not entry.data.date
+const formattedDate = formatDate(entry.data.pubDate)
 const readTime = await getCombinedReadingTime(entry.id)
-const authors = await parseAuthors(entry.data.authors ?? [])
+// Assuming entry.data.authors might not exist, but entry.data.author or post.data.authors (plural) does from content/config.ts for posts
+// The parseAuthors function in data-utils likely handles this.
+// For consistency with [...slug].astro, let's assume authors can be derived from entry.data.author or entry.data.authors
+const authors = await parseAuthors(entry.data.author ? [entry.data.author] : (entry.data.authors || []));
 const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
+
+// Process slug for the link: remove trailing '/index' if present
+const postSlug = entry.slug.endsWith('/index') ? entry.slug.slice(0, -'/index'.length) : entry.slug;
+const postUrl = `/posts/${postSlug}`;
 ---
 
 <div
   class="hover:bg-secondary/50 rounded-xl border p-4 transition-colors duration-300 ease-in-out"
 >
   <Link
-    href={`/${entry.collection}/${entry.id}`}
+    href={postUrl} // Use the correctly processed URL
     class="flex flex-col gap-4 sm:flex-row"
   >
     {

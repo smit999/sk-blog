@@ -6,6 +6,14 @@ import { Icon } from 'astro-icon/components'
 
 const { newerPost, olderPost, parentPost } = Astro.props
 const isSubpost = !!parentPost
+
+function getPostLink(post: any | undefined | null): string {
+  if (!post) return '#'
+  // Assuming post objects (newerPost, olderPost, parentPost) are CollectionEntry<'posts'>
+  // Their slugs will be like 'category/post-name/index'
+  const slug = post.slug.endsWith('/index') ? post.slug.slice(0, -'/index'.length) : post.slug
+  return `/posts/${slug}#post-title`
+}
 ---
 
 <nav
@@ -15,7 +23,7 @@ const isSubpost = !!parentPost
   )}
 >
   <Link
-    href={olderPost ? `/blog/${olderPost.id}#post-title` : '#'}
+    href={getPostLink(olderPost)}
     class={cn(
       buttonVariants({ variant: 'outline' }),
       'rounded-lg group flex items-center justify-start size-full',
@@ -43,7 +51,7 @@ const isSubpost = !!parentPost
   {
     isSubpost && (
       <Link
-        href={parentPost ? `/blog/${parentPost.id}#post-title` : '#'}
+        href={getPostLink(parentPost)}
         class={cn(
           buttonVariants({ variant: 'outline' }),
           'group flex size-full items-center justify-center rounded-lg',
@@ -67,7 +75,7 @@ const isSubpost = !!parentPost
   }
 
   <Link
-    href={newerPost ? `/blog/${newerPost.id}#post-title` : '#'}
+    href={getPostLink(newerPost)}
     class={cn(
       buttonVariants({ variant: 'outline' }),
       'rounded-lg group flex items-center justify-end size-full',

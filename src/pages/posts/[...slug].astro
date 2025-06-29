@@ -24,17 +24,21 @@ import PostNavigation from '@/components/PostNavigation.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { slug: post.slug }, // Use post.slug
-    props: { post },
-  }));
+  return posts.map((post) => {
+    // If slug ends with /index, remove it for cleaner URLs
+    const slug = post.slug.endsWith('/index') ? post.slug.slice(0, -'/index'.length) : post.slug;
+    return {
+      params: { slug: slug },
+      props: { post }, // Pass the original post object
+    };
+  });
 }
 
 interface Props {
   post: CollectionEntry<'posts'>;
 }
 
-const { post } = Astro.props;
+const { post } = Astro.props; // post.slug here is the original one, e.g., "category/post-name/index"
 const { Content } = await post.render(); // Correct way to get Content component
 
 const authors = await parseAuthors(post.data.author ? [post.data.author] : (post.data.authors || [])); // Handle single author or authors array
@@ -45,12 +49,21 @@ const tocSections = await getTOCSections(post.id);
 const subposts = await getSubpostsForParent(isSubpost(post.id) ? post.id.split('/')[0] : post.id);
 const parentP = isSubpost(post.id) ? await getParentPost(post.id) : null;
 
+// Construct breadcrumbs
+const breadcrumbItems: BreadcrumbItem[] = [{ href: '/posts', label: 'Blog' }];
 
-const breadcrumbItems: BreadcrumbItem[] = [
-  { href: '/posts', label: 'Blog' },
-];
+// Extract category from the original post slug (e.g., "category/post-name/index")
+const slugParts = post.slug.split('/');
+if (slugParts.length > 2) { // Check if there's a category part before post-name and index
+  const category = slugParts[0];
+  // Capitalize first letter for display
+  breadcrumbItems.push({ label: category.charAt(0).toUpperCase() + category.slice(1) });
+}
+
 if (parentP) {
-  breadcrumbItems.push({ href: `/posts/${parentP.slug}`, label: parentP.data.title });
+  // Ensure parentP.slug used for URL is also stripped of /index
+  const parentDisplaySlug = parentP.slug.endsWith('/index') ? parentP.slug.slice(0, -'/index'.length) : parentP.slug;
+  breadcrumbItems.push({ href: `/posts/${parentDisplaySlug}`, label: parentP.data.title });
 }
 breadcrumbItems.push({ label: post.data.title });
 
