@@ -58,9 +58,10 @@ const breadcrumbItems: BreadcrumbItem[] = [{ href: '/posts', label: 'Blog' }];
 // post.slug is like "general/hello-world" or "travel/my-alpine-adventure"
 const slugParts = post.slug.split('/');
 if (slugParts.length > 1) { // If slug is "category/post-name", length is 2. Category exists.
-  const category = slugParts[0];
-  // Capitalize first letter for display
-  breadcrumbItems.push({ label: category.charAt(0).toUpperCase() + category.slice(1) });
+  const category = slugParts[0]; // This is the category slug, e.g., "travel"
+  // Capitalize first letter for display label
+  const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
+  breadcrumbItems.push({ href: `/posts/${category}/`, label: categoryLabel });
 }
 
 if (parentP) {

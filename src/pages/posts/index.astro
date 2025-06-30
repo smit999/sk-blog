@@ -23,6 +23,20 @@ const sortedPosts = allPosts.sort((a, b) => new Date(b.data.pubDate).valueOf() -
 // If true pagination with separate pages is needed, this page would be `src/pages/posts/1.astro` or part of `[page].astro`.
 
 const postsToDisplay = sortedPosts; // Display all for now
+
+// Extract unique categories for navigation
+const uniqueCategorySlugs = new Set<string>();
+allPosts.forEach(post => {
+  const slugParts = post.slug.split('/'); // post.slug is like "category/post-name"
+  if (slugParts.length > 1) {
+    uniqueCategorySlugs.add(slugParts[0]);
+  }
+});
+const categoriesForNav = Array.from(uniqueCategorySlugs).map(slug => ({
+  name: slug.charAt(0).toUpperCase() + slug.slice(1),
+  href: `/posts/${slug}/` // Link to the category page e.g. /posts/travel/
+})).sort((a, b) => a.name.localeCompare(b.name)); // Sort categories alphabetically
+
 const pageTitle = "Blog Posts";
 const pageDescription = "All blog posts from " + SITE.title;
 ---
@@ -35,6 +49,19 @@ const pageDescription = "All blog posts from " + SITE.title;
   <section class="py-8">
     <div class="container mx-auto px-4">
       <h1 class="text-4xl font-bold mb-8 text-center">{pageTitle}</h1>
+
+      {categoriesForNav.length > 0 && (
+        <div class="mb-12 text-center"> {/* Increased bottom margin */}
+          <h2 class="text-2xl font-semibold mb-4">Categories</h2>
+          <div class="flex flex-wrap justify-center gap-3"> {/* Increased gap */}
+            {categoriesForNav.map(cat => (
+              <a href={cat.href} class="bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                {cat.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       {postsToDisplay.length === 0 ? (
         <p class="text-center text-muted-foreground">No posts found.</p>
