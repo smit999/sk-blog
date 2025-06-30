@@ -33,6 +33,7 @@ export async function getStaticPaths({ paginate }) {
 }
 
 const { page, categoriesForNav } = Astro.props; // `page` is injected by paginate, categoriesForNav from props
+console.log('[Paginated Page] categoriesForNav received in props:', JSON.stringify(categoriesForNav, null, 2)); // DIAGNOSTIC LOG
 const postsToDisplay = page.data; // Posts for the current page
 
 const pageTitle = `Blog Posts ${page.totalPages > 1 ? `- Page ${page.currentPage}` : ''}`;
